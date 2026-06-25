@@ -1,0 +1,28 @@
+# --- Java / Maven ---
+target/
+.gradle/
+build/
+*.jar
+*.war
+*.log
+.idea/
+*.iml
+
+# --- React / Node ---
+node_modules/
+dist/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- IDE / OS ---
+.DS_Store
+.vscode/
+
+# --- Project Specific ---
+# Exclude uploaded images so they aren't tracked by Git
+/uploads

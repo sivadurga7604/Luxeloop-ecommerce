@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.checkout-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2, #ff6b6b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkout-card {
+    width: 420px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.checkout-card h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.checkout-card h2,
+.checkout-card h3 {
+    color: white;
+    margin: 10px 0;
+}
+
+.checkout-card button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #00d4ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.checkout-card button:hover {
+    transform: scale(1.05);
+}
