@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.entity.Wishlist;
 import com.ecommerce.repository.WishlistRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,11 @@ public class WishlistController {
         return repo.findByUserId(userId);
     }
 
-    // Remove item from wishlist by userId + productId
+    // Remove item from wishlist
+    @Transactional
     @DeleteMapping("/{userId}/{productId}")
-    public void remove(@PathVariable Long userId, @PathVariable Long productId) {
+    public void remove(@PathVariable Long userId,
+                       @PathVariable Long productId) {
         repo.deleteByUserIdAndProductId(userId, productId);
     }
 }
