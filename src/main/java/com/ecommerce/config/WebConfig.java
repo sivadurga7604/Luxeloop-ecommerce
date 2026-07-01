@@ -15,9 +15,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // This allows your frontend to communicate with your backend
         registry.addMapping("/**")
-                .allowedOrigins("*") // In production, replace '*' with your actual frontend URL
+                // 1. Replace '*' with your specific frontend domain
+                .allowedOrigins("https://luxeloop-ecommerce-1.onrender.com")
+                // 2. This is often required for the browser to trust the cross-origin response
+                .allowCredentials(true)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
