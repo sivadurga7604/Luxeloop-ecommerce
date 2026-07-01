@@ -16,8 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                // Change .allowedOrigins to .allowedOriginPatterns
-                .allowedOriginPatterns("*")
+                // Use this pattern to allow the frontend to connect securely
+                .allowedOriginPatterns("https://luxeloop-ecommerce-1.onrender.com")
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
