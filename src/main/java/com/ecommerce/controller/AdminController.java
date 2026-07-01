@@ -16,10 +16,9 @@ public class AdminController {
 
     @GetMapping("/analytics")
     public Map<String, Object> analytics() {
-
         double revenue = orderRepository.findAll()
                 .stream()
-                .mapToDouble(Order::getTotalAmount)  // ← double not int
+                .mapToDouble(Order::getTotalAmount)
                 .sum();
 
         Map<String, Object> map = new HashMap<>();
