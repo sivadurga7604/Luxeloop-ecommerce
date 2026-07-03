@@ -7,19 +7,33 @@ function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        Promise.all([
-            fetch(`${API}/products`).then(res => res.json()),
-            fetch(`${API}/order`).then(res => res.json())
-        ])
-        .then(([prodData, orderData]) => {
-            setProducts(Array.isArray(prodData) ? prodData : []);
-            setOrders(Array.isArray(orderData) ? orderData : []);
-            setLoading(false);
-        })
-        .catch(err => {
-            console.error("Dashboard fetch error:", err);
-            setLoading(false);
-        });
+        setLoading(true);
+
+        fetch(`${API}/products`)
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch products: " + res.status);
+                return res.json();
+            })
+            .then(data => setProducts(Array.isArray(data) ? data : []))
+            .catch(err => {
+                console.error("Dashboard products fetch error:", err);
+                setProducts([]);
+            });
+
+        fetch(`${API}/order`)
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch orders: " + res.status);
+                return res.json();
+            })
+            .then(data => {
+                setOrders(Array.isArray(data) ? data : []);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Dashboard orders fetch error:", err);
+                setOrders([]);
+                setLoading(false);
+            });
     }, []);
 
     const revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);

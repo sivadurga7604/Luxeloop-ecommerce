@@ -18,21 +18,32 @@ function AdminProducts() {
 
     const loadData = () => {
         setLoading(true);
-        Promise.all([
-            fetch(`${API}/products`).then(res => res.json()),
-            fetch(`${API}/categories`).then(res => res.json())
-        ])
-        .then(([prodData, catData]) => {
-            setProducts(Array.isArray(prodData) ? prodData : []);
-            setCategories(Array.isArray(catData) ? catData : []);
-            setLoading(false);
-        })
-        .catch(err => {
-            console.error("Error loading admin products data:", err);
-            setProducts([]);
-            setCategories([]);
-            setLoading(false);
-        });
+
+        fetch(`${API}/products`)
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch products: " + res.status);
+                return res.json();
+            })
+            .then(data => setProducts(Array.isArray(data) ? data : []))
+            .catch(err => {
+                console.error("Products load error:", err);
+                setProducts([]);
+            });
+
+        fetch(`${API}/categories`)
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch categories: " + res.status);
+                return res.json();
+            })
+            .then(data => {
+                setCategories(Array.isArray(data) ? data : []);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Categories load error:", err);
+                setCategories([]);
+                setLoading(false);
+            });
     };
 
     const uploadImage = (file) => {
@@ -57,18 +68,35 @@ function AdminProducts() {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(product)
-        }).then(() => {
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to save product: Status " + res.status);
+            return res.json();
+        })
+        .then(() => {
             setProduct({ name: "", price: "", imageUrl: "", categories: [] });
             setEditId(null);
             setShowForm(false);
             loadData();
             alert(editId ? "Product updated!" : "Product added!");
+        })
+        .catch(err => {
+            console.error("Save product error:", err);
+            alert("Error saving product: " + err.message);
         });
     };
 
     const deleteProduct = (id) => {
         if (window.confirm("Delete this product?")) {
-            fetch(`${API}/products/${id}`, { method: "DELETE" }).then(() => loadData());
+            fetch(`${API}/products/${id}`, { method: "DELETE" })
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to delete product: Status " + res.status);
+                    loadData();
+                })
+                .catch(err => {
+                    console.error("Delete product error:", err);
+                    alert("Error deleting product: " + err.message);
+                });
         }
     };
 
