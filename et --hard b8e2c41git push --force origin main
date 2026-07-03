@@ -1,0 +1,21 @@
+[33m1b1e3c9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix: Switch to allowedOriginPatterns for CORS
+[33mf95be7e[m Update CORS to use allowedOriginPatterns for credentials
+[33mde92926[m Fix CORS by switching to allowedOriginPatterns
+[33m6391067[m Fix: Configure dynamic server port and improve frontend resilience
+[33m9e41d16[m Fix: Add defensive array checks to AdminProducts to prevent white screen crashes
+[33me5faa87[m Fix: Update CORS to use specific origin and allow credentials
+[33m1d2cb15[m Fix: Add Transactional and Modifying annotations to WishlistRepository
+[33m857ebfa[m Fix: Add role-based authentication and separate AdminController/AuthController
+[33m9a75cb2[m fix: remove AdminSetupController
+[33m777dcc2[m fix: remove duplicate java files
+[33m326e87d[m fix: add admin setup endpoint
+[33mce99b15[m Fix wishlist delete using service transaction
+[33m2bf8490[m Fix wishlist delete using JpaRepository delete
+[33m4b6598d[m Restore Wishlist entity
+[33m1d16c59[m Fix wishlist delete transaction
+[33m1aa904e[m Fix wishlist delete
+[33m9cc0952[m fix: cloudinary upload + wishlist remove
+[33mcd5320f[m fix: wishlist delete transactional
+[33m70f9168[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m fix: add frontend files properly
+[33mdb97422[m Clean project upload: node_modules and uploads ignored
+[33m939e341[m Add gitignore
