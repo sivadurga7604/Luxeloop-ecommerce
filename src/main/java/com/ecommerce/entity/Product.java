@@ -16,7 +16,7 @@ public class Product {
     private double price;
     private String imageUrl;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"),
