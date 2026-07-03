@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @RestController
-@CrossOrigin("*")
 public class UploadController {
 
     private static final String CLOUD_NAME = "dfchvym13";

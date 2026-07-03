@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wishlist")
-@CrossOrigin("*")
 public class WishlistController {
 
     @Autowired

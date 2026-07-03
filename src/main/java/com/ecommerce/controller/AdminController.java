@@ -8,7 +8,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin("*")
 public class AdminController {
 
     @Autowired

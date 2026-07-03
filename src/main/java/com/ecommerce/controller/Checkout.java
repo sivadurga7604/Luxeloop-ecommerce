@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/checkout")
-@CrossOrigin("*")
 public class Checkout {
 
     @Autowired
