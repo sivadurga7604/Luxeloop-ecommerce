@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-const API = "https://luxeloop-backend.onrender.com";
+import { API, getImageUrl } from "../config";
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -8,45 +7,39 @@ function ProductList() {
     const [activeCategory, setActiveCategory] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [wishlistIds, setWishlistIds] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const userId = localStorage.getItem("userId");
 
     useEffect(() => {
-        loadProducts(null);
-        loadCategories();
-        loadWishlist();
+        setLoading(true);
+        Promise.all([
+            loadCategoriesPromise(),
+            loadProductsPromise(null),
+            loadWishlistPromise()
+        ]).finally(() => setLoading(false));
     }, []);
 
-    // Helper to resolve image URL
-    const getImageUrl = (imageUrl) => {
-        if (!imageUrl) return "https://placehold.co/150x150?text=No+Image";
-        // If it's a relative path like /uploads/..., prepend the API URL
-        if (imageUrl.startsWith("/")) return `${API}${imageUrl}`;
-        return imageUrl;
-    };
-
-    const loadCategories = () => {
-        fetch(`${API}/categories`)
-            .then(res => {
-                if (!res.ok) throw new Error("Server returned " + res.status);
-                return res.json();
-            })
+    const loadCategoriesPromise = () => {
+        return fetch(`${API}/categories`)
+            .then(res => res.ok ? res.json() : [])
             .then(data => setCategories(data))
-            .catch(err => console.error("Could not load categories. Check your Backend URL:", err));
+            .catch(() => setCategories([]));
     };
 
-    const loadProducts = (categoryId) => {
+    const loadProductsPromise = (categoryId) => {
         const url = categoryId
             ? `${API}/products/category/${categoryId}`
             : `${API}/products`;
-        fetch(url)
+        return fetch(url)
             .then(res => res.json())
-            .then(data => setProducts(Array.isArray(data) ? data : []));
+            .then(data => setProducts(Array.isArray(data) ? data : []))
+            .catch(() => setProducts([]));
     };
 
-    const loadWishlist = () => {
-        if (!userId) return;
-        fetch(`${API}/wishlist/${userId}`)
+    const loadWishlistPromise = () => {
+        if (!userId) return Promise.resolve();
+        return fetch(`${API}/wishlist/${userId}`)
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) setWishlistIds(data.map(w => w.productId));
@@ -57,16 +50,22 @@ function ProductList() {
     const handleTabClick = (categoryId) => {
         setActiveCategory(categoryId);
         setSearchTerm("");
-        loadProducts(categoryId);
+        setLoading(true);
+        loadProductsPromise(categoryId).finally(() => setLoading(false));
     };
 
     const handleSearch = (term) => {
         setSearchTerm(term);
         setActiveCategory(null);
-        if (term.trim() === "") { loadProducts(null); return; }
+        if (term.trim() === "") {
+            setLoading(true);
+            loadProductsPromise(null).finally(() => setLoading(false));
+            return;
+        }
         fetch(`${API}/products/search?name=${encodeURIComponent(term)}`)
             .then(res => res.json())
-            .then(data => setProducts(Array.isArray(data) ? data : []));
+            .then(data => setProducts(Array.isArray(data) ? data : []))
+            .catch(() => setProducts([]));
     };
 
     const addToCart = (product) => {
@@ -87,7 +86,11 @@ function ProductList() {
                 quantity: 1
             })
         }).then(res => {
-            if (res.ok) alert(product.name + " added to cart!");
+            if (res.ok) {
+                alert(`Added ${product.name} to cart!`);
+            } else {
+                alert("Failed to add product to cart.");
+            }
         });
     };
 
@@ -117,75 +120,238 @@ function ProductList() {
         }
     };
 
-    const tabStyle = (isActive) => ({
-        padding: "10px 20px",
-        marginRight: "10px",
-        marginBottom: "20px",
-        borderRadius: "20px",
-        border: "none",
-        cursor: "pointer",
-        fontWeight: "bold",
-        background: isActive ? "#c2185b" : "#ffe0ec",
-        color: isActive ? "white" : "#c2185b"
-    });
-
     return (
-        <div style={{ padding: "20px" }}>
-            <h1 style={{ color: "#333" }}>Products</h1>
-            <input
-                type="text"
-                placeholder="🔍 Search products..."
-                value={searchTerm}
-                onChange={e => handleSearch(e.target.value)}
-                style={{
-                    width: "100%", maxWidth: "400px", padding: "12px 15px",
-                    marginBottom: "20px", borderRadius: "25px",
-                    border: "1px solid #ffc1d9", fontSize: "15px",
-                    outline: "none", display: "block"
-                }}
-            />
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <button style={tabStyle(activeCategory === null && searchTerm === "")} onClick={() => handleTabClick(null)}>All</button>
+        <div style={{ padding: "40px 5%", maxWidth: "1400px", margin: "0 auto" }} className="fade-in">
+            {/* Header & Search */}
+            <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                alignItems: "center", 
+                flexWrap: "wrap", 
+                gap: "20px",
+                marginBottom: "35px"
+            }}>
+                <div>
+                    <h1 style={{ fontSize: "32px", color: "var(--primary-dark)", marginBottom: "4px" }}>Boutique Collection</h1>
+                    <p style={{ color: "var(--text-secondary)", fontSize: "14.5px" }}>Discover high-end styles curated specifically for you</p>
+                </div>
+                
+                <div style={{ position: "relative", width: "100%", maxWidth: "380px" }}>
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={e => handleSearch(e.target.value)}
+                        style={{
+                            width: "100%", 
+                            padding: "12px 16px 12px 42px", 
+                            borderRadius: "30px",
+                            border: "1.5px solid var(--border-color)", 
+                            fontSize: "14.5px"
+                        }}
+                    />
+                    <span style={{ 
+                        position: "absolute", 
+                        left: "16px", 
+                        top: "50%", 
+                        transform: "translateY(-50%)", 
+                        color: "var(--text-secondary)",
+                        fontSize: "16px"
+                    }}>🔍</span>
+                </div>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div style={{ 
+                display: "flex", 
+                flexWrap: "wrap", 
+                gap: "10px", 
+                marginBottom: "40px",
+                borderBottom: "1.5px solid var(--border-color)",
+                paddingBottom: "20px"
+            }}>
+                <button 
+                    onClick={() => handleTabClick(null)}
+                    style={{
+                        padding: "10px 24px",
+                        borderRadius: "30px",
+                        border: "none",
+                        cursor: "pointer",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        background: (activeCategory === null && searchTerm === "") ? "var(--primary)" : "#f3e8ec",
+                        color: (activeCategory === null && searchTerm === "") ? "white" : "var(--primary)",
+                        boxShadow: (activeCategory === null && searchTerm === "") ? "0 4px 12px rgba(128,0,50,0.15)" : "none"
+                    }}
+                >
+                    All Collection
+                </button>
                 {categories.map(c => (
-                    <button key={c.id} style={tabStyle(activeCategory === c.id)} onClick={() => handleTabClick(c.id)}>{c.name}</button>
+                    <button 
+                        key={c.id} 
+                        onClick={() => handleTabClick(c.id)}
+                        style={{
+                            padding: "10px 24px",
+                            borderRadius: "30px",
+                            border: "none",
+                            cursor: "pointer",
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            background: activeCategory === c.id ? "var(--primary)" : "#f3e8ec",
+                            color: activeCategory === c.id ? "white" : "var(--primary)",
+                            boxShadow: activeCategory === c.id ? "0 4px 12px rgba(128,0,50,0.15)" : "none"
+                        }}
+                    >
+                        {c.name}
+                    </button>
                 ))}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-                {products.length === 0 && <p>No products found.</p>}
-                {products.map(p => {
-                    const isWishlisted = wishlistIds.includes(p.id);
-                    return (
-                        <div key={p.id} style={{
-                            background: "#fff", borderRadius: "10px", padding: "15px",
-                            textAlign: "center", boxShadow: "0 2px 8px rgba(194,24,91,0.1)",
-                            position: "relative"
+
+            {/* Product Grid */}
+            {loading ? (
+                <div style={{ textAlign: "center", padding: "60px 0" }}>
+                    <p style={{ color: "var(--text-secondary)", fontSize: "16px" }}>Curating collections...</p>
+                </div>
+            ) : (
+                <>
+                    {products.length === 0 ? (
+                        <div style={{ 
+                            textAlign: "center", 
+                            padding: "60px 20px", 
+                            background: "#fff", 
+                            borderRadius: "16px",
+                            border: "1px dashed var(--border-color)"
                         }}>
-                            <span onClick={() => toggleWishlist(p)} style={{
-                                position: "absolute", top: "10px", right: "10px",
-                                fontSize: "22px", cursor: "pointer", userSelect: "none"
-                            }}>
-                                {isWishlisted ? "❤️" : "🤍"}
-                            </span>
-                            <img
-                                src={getImageUrl(p.imageUrl)}
-                                alt={p.name}
-                                width="150" height="150"
-                                style={{ objectFit: "cover", borderRadius: "8px" }}
-                                onError={(e) => {
-                                    e.target.onerror = null; // THIS STOPS THE INFINITE LOOP
-                                    e.target.src = "https://placehold.co/150x150?text=No+Image";
-                                }}
-                            />
-                            <h3>{p.name}</h3>
-                            <p style={{ fontWeight: "bold", color: "#c2185b" }}>₹{p.price}</p>
-                            <button onClick={() => addToCart(p)} style={{
-                                background: "#c2185b", color: "white", border: "none",
-                                padding: "8px 20px", borderRadius: "6px", cursor: "pointer", marginTop: "10px"
-                            }}>Add to Cart</button>
+                            <p style={{ color: "var(--text-secondary)", fontSize: "16px" }}>No items found in this section.</p>
                         </div>
-                    );
-                })}
-            </div>
+                    ) : (
+                        <div style={{ 
+                            display: "grid", 
+                            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+                            gap: "30px" 
+                        }}>
+                            {products.map(p => {
+                                const isWishlisted = wishlistIds.includes(p.id);
+                                return (
+                                    <div 
+                                        key={p.id} 
+                                        style={{
+                                            background: "#ffffff", 
+                                            borderRadius: "16px", 
+                                            padding: "20px",
+                                            boxShadow: "var(--shadow-sm)",
+                                            border: "1px solid var(--border-color)",
+                                            position: "relative",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "space-between",
+                                            transition: "all 0.3s ease",
+                                            overflow: "hidden"
+                                        }}
+                                        className="product-card"
+                                        onMouseEnter={(e) => { 
+                                            e.currentTarget.style.transform = "translateY(-6px)";
+                                            e.currentTarget.style.boxShadow = "var(--shadow-md)";
+                                        }}
+                                        onMouseLeave={(e) => { 
+                                            e.currentTarget.style.transform = "translateY(0)";
+                                            e.currentTarget.style.boxShadow = "var(--shadow-sm)";
+                                        }}
+                                    >
+                                        {/* Wishlist toggle heart */}
+                                        <button 
+                                            onClick={() => toggleWishlist(p)} 
+                                            style={{
+                                                position: "absolute", 
+                                                top: "16px", 
+                                                right: "16px",
+                                                background: "rgba(255,255,255,0.9)",
+                                                border: "none",
+                                                borderRadius: "50%",
+                                                width: "36px",
+                                                height: "36px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                                                cursor: "pointer",
+                                                zIndex: 10,
+                                                fontSize: "18px"
+                                            }}
+                                        >
+                                            {isWishlisted ? "❤️" : "🤍"}
+                                        </button>
+
+                                        {/* Product image with container */}
+                                        <div style={{ 
+                                            background: "#fff", 
+                                            height: "220px", 
+                                            borderRadius: "10px", 
+                                            overflow: "hidden",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            marginBottom: "20px"
+                                        }}>
+                                            <img
+                                                src={getImageUrl(p.imageUrl)}
+                                                alt={p.name}
+                                                style={{ 
+                                                    maxWidth: "100%", 
+                                                    maxHeight: "100%", 
+                                                    objectFit: "contain",
+                                                    transition: "transform 0.5s ease"
+                                                }}
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "https://placehold.co/150x150?text=No+Image";
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Product Info */}
+                                        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                                            <div>
+                                                <h3 style={{ 
+                                                    fontSize: "16.5px", 
+                                                    color: "var(--primary-dark)", 
+                                                    marginBottom: "6px",
+                                                    lineHeight: "1.3" 
+                                                }}>{p.name}</h3>
+                                                <p style={{ 
+                                                    fontWeight: "700", 
+                                                    color: "var(--primary-light)", 
+                                                    fontSize: "18px",
+                                                    marginBottom: "16px" 
+                                                }}>₹{p.price.toLocaleString("en-IN")}</p>
+                                            </div>
+                                            
+                                            <button 
+                                                onClick={() => addToCart(p)} 
+                                                style={{
+                                                    width: "100%",
+                                                    background: "var(--primary)", 
+                                                    color: "white", 
+                                                    border: "none",
+                                                    padding: "12px", 
+                                                    borderRadius: "8px", 
+                                                    cursor: "pointer",
+                                                    fontWeight: "600",
+                                                    fontSize: "14px"
+                                                }}
+                                                onMouseEnter={(e) => { e.target.style.background = "var(--primary-light)"; }}
+                                                onMouseLeave={(e) => { e.target.style.background = "var(--primary)"; }}
+                                            >
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 }

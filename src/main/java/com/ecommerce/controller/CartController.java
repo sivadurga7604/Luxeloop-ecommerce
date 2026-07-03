@@ -35,6 +35,11 @@ public class CartController {
         cartService.removeItem(id);
     }
 
+    @PutMapping("/{id}")
+    public CartItem updateQuantity(@PathVariable Long id, @RequestParam Integer quantity) {
+        return cartService.updateCartItem(id, quantity);
+    }
+
     @DeleteMapping("/clear/{userId}")
     public void clearCart(@PathVariable Long userId) {
         cartService.clearCart(userId);

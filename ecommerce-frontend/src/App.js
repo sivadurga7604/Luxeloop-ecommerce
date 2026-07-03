@@ -25,16 +25,17 @@ function Navbar() {
     const location = useLocation();
     const isLoggedIn = !!localStorage.getItem("token");
     const isAdmin = localStorage.getItem("role") === "ADMIN";
+    const userName = localStorage.getItem("name");
 
     const linkStyle = (path) => ({
-        color: "white",
+        color: location.pathname === path ? "#800032" : "#605c65",
         textDecoration: "none",
         fontWeight: location.pathname === path ? "700" : "500",
-        padding: "8px 14px",
+        padding: "8px 16px",
         borderRadius: "20px",
-        background: location.pathname === path ? "rgba(255,255,255,0.25)" : "transparent",
-        transition: "all 0.2s",
-        fontSize: "14px",
+        background: location.pathname === path ? "#fce4ec" : "transparent",
+        transition: "all 0.2s ease",
+        fontSize: "14.5px",
         whiteSpace: "nowrap"
     });
 
@@ -48,83 +49,104 @@ function Navbar() {
 
     return (
         <div>
+            {/* Top Brand Banner */}
             <div style={{
-                background: "linear-gradient(135deg, #3d0a1f, #800032)",
-                padding: "18px 0 12px",
-                textAlign: "center"
+                background: "linear-gradient(135deg, #3d0016, #1f000b)",
+                padding: "24px 0 16px",
+                textAlign: "center",
+                borderBottom: "3px solid #c29b38"
             }}>
                 <div style={{
-                    color: "#ff4d8d",
-                    fontSize: "32px",
+                    color: "#c29b38",
+                    fontSize: "36px",
                     fontWeight: "800",
-                    letterSpacing: "6px",
-                    fontFamily: "Georgia, serif"
+                    letterSpacing: "8px",
+                    fontFamily: "'Playfair Display', Georgia, serif"
                 }}>
                     LUXELOOP
                 </div>
                 <div style={{
-                    color: "#f5b6cf",
-                    fontSize: "12px",
-                    letterSpacing: "3px",
-                    marginTop: "2px"
+                    color: "#e2cfa2",
+                    fontSize: "11px",
+                    letterSpacing: "4px",
+                    marginTop: "4px",
+                    fontWeight: "500"
                 }}>
                     ELEVATE YOUR STYLE
                 </div>
             </div>
 
+            {/* Navigation links bar */}
             <div style={{
-                background: "linear-gradient(90deg, #ff4d8d, #c2185b)",
-                padding: "14px 25px",
+                background: "#ffffff",
+                padding: "12px 25px",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
                 flexWrap: "wrap",
-                gap: "6px",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+                gap: "12px",
+                boxShadow: "0 4px 20px rgba(128, 0, 50, 0.05)",
                 position: "sticky",
                 top: 0,
-                zIndex: 100
+                zIndex: 100,
+                borderBottom: "1px solid #f3e8ec"
             }}>
-                <Link to="/" style={linkStyle("/")}>Products</Link>
-                <Link to="/cart" style={linkStyle("/cart")}>Cart</Link>
-                <Link to="/wishlist" style={linkStyle("/wishlist")}>Wishlist</Link>
-                <Link to="/checkout" style={linkStyle("/checkout")}>Checkout</Link>
-                <Link to="/orders" style={linkStyle("/orders")}>Orders</Link>
+                <div style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+                    <Link to="/" style={linkStyle("/")}>Products</Link>
+                    <Link to="/cart" style={linkStyle("/cart")}>Cart</Link>
+                    <Link to="/wishlist" style={linkStyle("/wishlist")}>Wishlist</Link>
+                    <Link to="/checkout" style={linkStyle("/checkout")}>Checkout</Link>
+                    <Link to="/orders" style={linkStyle("/orders")}>Orders</Link>
 
-                {/* FIX: only show admin links to ADMIN users */}
-                {isAdmin && (
-                    <>
-                        <Link to="/admin" style={linkStyle("/admin")}>Dashboard</Link>
-                        <Link to="/admin-products" style={linkStyle("/admin-products")}>Manage</Link>
-                    </>
-                )}
+                    {isAdmin && (
+                        <>
+                            <span style={{ color: "#d8c2cb", padding: "0 4px" }}>|</span>
+                            <Link to="/admin" style={linkStyle("/admin")}>Dashboard</Link>
+                            <Link to="/admin-products" style={linkStyle("/admin-products")}>Manage Products</Link>
+                        </>
+                    )}
+                </div>
 
-                {isLoggedIn ? (
-                    <button onClick={logout} style={{
-                        background: "rgba(255,255,255,0.2)",
-                        color: "white",
-                        border: "1px solid rgba(255,255,255,0.4)",
-                        padding: "7px 16px",
-                        borderRadius: "20px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        fontWeight: "600"
-                    }}>
-                        Logout
-                    </button>
-                ) : (
-                    <>
-                        <Link to="/login" style={linkStyle("/login")}>Login</Link>
-                        <Link to="/register" style={{
-                            ...linkStyle("/register"),
-                            background: "white",
-                            color: "#c2185b",
-                            fontWeight: "700"
-                        }}>
-                            Register
-                        </Link>
-                    </>
-                )}
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    {isLoggedIn && userName && (
+                        <span style={{ fontSize: "14px", color: "#605c65", marginRight: "5px" }}>
+                            Hello, <strong style={{ color: "#800032" }}>{userName}</strong>
+                        </span>
+                    )}
+
+                    {isLoggedIn ? (
+                        <button onClick={logout} style={{
+                            background: "transparent",
+                            color: "#800032",
+                            border: "1.5px solid #800032",
+                            padding: "8px 18px",
+                            borderRadius: "20px",
+                            cursor: "pointer",
+                            fontSize: "13.5px",
+                            fontWeight: "600"
+                        }}
+                        onMouseEnter={(e) => { e.target.style.background = "#800032"; e.target.style.color = "white"; }}
+                        onMouseLeave={(e) => { e.target.style.background = "transparent"; e.target.style.color = "#800032"; }}
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                            <Link to="/login" style={linkStyle("/login")}>Login</Link>
+                            <Link to="/register" style={{
+                                ...linkStyle("/register"),
+                                background: "#800032",
+                                color: "white",
+                                fontWeight: "600"
+                            }}
+                            onMouseEnter={(e) => { e.target.style.background = "#a31d4f"; }}
+                            onMouseLeave={(e) => { e.target.style.background = "#800032"; }}
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
