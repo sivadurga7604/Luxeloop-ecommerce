@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siva Durga - Resume</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333333;
+            background-color: #ffffff;
+            line-height: 1.4;
+            padding: 40px;
+            font-size: 13.5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header section */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: #111111;
+            text-transform: uppercase;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            color: #555555;
+            flex-wrap: wrap;
+        }
+
+        .contact-info span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Section line styling */
+        section {
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #111111;
+            border-bottom: 2px solid #d4af37; /* Elegant gold separator */
+            padding-bottom: 3px;
+            margin-bottom: 8px;
+        }
+
+        p.summary-text {
+            color: #444444;
+            text-align: justify;
+        }
+
+        /* Skills grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .skill-item {
+            color: #444444;
+        }
+
+        .skill-item strong {
+            color: #111111;
+            font-weight: 600;
+        }
+
+        /* Lists and experience details */
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 4px;
+        }
+
+        .item-header span.date {
+            font-weight: 500;
+            color: #666666;
+            font-size: 12.5px;
+        }
+
+        .item-subtitle {
+            font-style: italic;
+            color: #555555;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        ul {
+            list-style-type: square;
+            margin-left: 20px;
+            color: #444444;
+        }
+
+        li {
+            margin-bottom: 4px;
+            text-align: justify;
+        }
+
+        .project-link {
+            color: #0066cc;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        /* Professional skills row */
+        .skills-row {
+            display: flex;
+            gap: 30px;
+            color: #444444;
+            flex-wrap: wrap;
+        }
+
+        .skills-row div {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Page print optimizations */
+        @media print {
+            body {
+                padding: 20px;
+                font-size: 12px;
+            }
+            .section-title {
+                border-bottom-color: #d4af37 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            a {
+                text-decoration: none !important;
+                color: #000000 !important;
+            }
+            @page {
+                margin: 0.4cm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- Header -->
+    <header>
+        <h1>Siva Durga</h1>
+        <div class="contact-info">
+            <span>📍 Chennai</span>
+            <span>✉️ <a href="mailto:sivadurgas7604@gmail.com">sivadurgas7604@gmail.com</a></span>
+            <span>📞 <a href="tel:+918248753263">8248753263</a></span>
+        </div>
+    </header>
+
+    <!-- Summary -->
+    <section>
+        <div class="section-title">Summary</div>
+        <p class="summary-text">
+            Entry-level software professional with a strong foundation in Core Java, Spring Boot, JDBC, and SQL databases. Experienced in full-stack application development, RESTful APIs, and database migrations. Highly motivated, quick learner, and eager to contribute to scalable, efficient, and high-quality software solutions in a collaborative environment.
+        </p>
+    </section>
+
+    <!-- Technical Skills -->
+    <section>
+        <div class="section-title">Technical Skills</div>
+        <div class="skills-grid">
+            <div class="skill-item"><strong>Programming Languages:</strong> Core Java, SQL</div>
+            <div class="skill-item"><strong>Frameworks & Libraries:</strong> Spring Boot, Hibernate</div>
+            <div class="skill-item"><strong>Web Technologies:</strong> React.js, HTML5, Vanilla CSS</div>
+            <div class="skill-item"><strong>Database & Connectivity:</strong> MySQL, PostgreSQL, JDBC</div>
+            <div class="skill-item"><strong>Tools & IDEs:</strong> IntelliJ IDEA, Eclipse, Git, GitHub</div>
+        </div>
+    </section>
+
+    <!-- Professional Experience -->
+    <section>
+        <div class="section-title">Professional Experience</div>
+        <div class="experience-block">
+            <div class="item-header">
+                <span>Full Stack Java Developer – QSpiders</span>
+                <span class="date">Chennai (2025)</span>
+            </div>
+            <ul>
+                <li>Trained in Core Java, JDBC, Servlets, Spring Boot, and SQL databases.</li>
+                <li>Practiced real-time clean coding standards, structured debugging techniques, and REST API conventions.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section>
+        <div class="section-title">Projects & Internships</div>
+        
+        <!-- Kryptos Infosys Internship Project -->
+        <div class="project-block" style="margin-bottom: 12px;">
+            <div class="item-header">
+                <span>Java Development Intern – Kryptos Infosys</span>
+                <span class="date">Chennai (Present)</span>
+            </div>
+            <div class="item-subtitle">
+                Project: **Luxeloop (Full-Stack Boutique E-Commerce)** | 
+                Live App: <a href="https://luxeloop-ecommerce-1.onrender.com" target="_blank" class="project-link">luxeloop-ecommerce-1.onrender.com</a>
+            </div>
+            <ul>
+                <li>Developed and deployed a responsive e-commerce web application using **Spring Boot (Java 21)** and **React.js**.</li>
+                <li>Designed a secure, transaction-safe backend database structure utilizing **Spring Data JPA** with **PostgreSQL** in production and **MySQL** locally, securing orders using `@Transactional` boundaries.</li>
+                <li>Created custom multipart file upload integrations with **Cloudinary API** to support secure, scalable product image storage.</li>
+                <li>Configured environment-aware API URL detection (*config.js*) and set up explicit CORS whitelist credentials in Spring MVC to prevent cross-origin preflight blocks.</li>
+                <li>Implemented dynamic shopping cart quantity adjustments (`PUT` API) and wishlist transfers with direct SPA state updates to eliminate page reloads and improve performance.</li>
+            </ul>
+        </div>
+
+        <!-- Machine Learning Project -->
+        <div class="project-block">
+            <div class="item-header">
+                <span>Flood Prediction Using Machine Learning</span>
+                <span class="date">Academic Project</span>
+            </div>
+            <ul>
+                <li>Developed a flood prediction system utilizing deep learning and Machine Learning techniques.</li>
+                <li>Used LSTM networks for rainfall forecasting and flood risk analysis, and VGG16 for image-based flood damage assessment.</li>
+                <li>Implemented the project in MATLAB to provide real-time alerts and insights.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Education -->
+    <section>
+        <div class="section-title">Education</div>
+        <div style="margin-bottom: 8px;">
+            <div class="item-header">
+                <span>Bachelor of Engineering (Computer Science & Engineering)</span>
+                <span class="date">2021 - 2025</span>
+            </div>
+            <div class="item-subtitle">Panimalar Engineering College - CGPA: 7.8</div>
+        </div>
+        <div style="margin-bottom: 8px;">
+            <div class="item-header">
+                <span>HSC (Dr. J. C. Kumarappa Matric Higher Sec. School)</span>
+                <span class="date">2020 - 2021</span>
+            </div>
+            <div class="item-subtitle">Percentage: 84.3%</div>
+        </div>
+        <div>
+            <div class="item-header">
+                <span>SSLC (Dr. J. C. Kumarappa Matric Higher Sec. School)</span>
+                <span class="date">2018 - 2019</span>
+            </div>
+            <div class="item-subtitle">Percentage: 85%</div>
+        </div>
+    </section>
+
+    <!-- Professional Skills -->
+    <section>
+        <div class="section-title">Professional Skills</div>
+        <div class="skills-row">
+            <div>• Adaptability</div>
+            <div>• Collaboration</div>
+            <div>• Time Management</div>
+            <div>• Versatility</div>
+        </div>
+    </section>
+
+    <!-- Additional Information -->
+    <section>
+        <div class="section-title">Additional Information</div>
+        <p><strong>Languages:</strong> English, Tamil</p>
+        <p style="margin-top: 8px; font-size: 11px; color: #666; font-style: italic;">
+            * Declaration: I hereby declare that the information provided above is true and accurate to the best of my knowledge.
+        </p>
+    </section>
+
+</div>
+
+</body>
+</html>
